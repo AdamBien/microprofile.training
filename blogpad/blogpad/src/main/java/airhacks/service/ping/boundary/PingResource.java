@@ -18,7 +18,7 @@ public class PingResource {
 
     @GET
     public String ping() {
-        return this.message + " Jakarta EE 8 with MicroProfile 3+!";
+        return this.message + " MicroProfile 3+!";
     }
 
 }

@@ -18,7 +18,7 @@ public class PingResourceIT {
 
     @BeforeEach
     public void init() {
-        URI uri = URI.create("http://localhost:8080/blogpad/resources/");
+        URI uri = URI.create("http://localhost:9080/blogpad/resources/");
         this.client = RestClientBuilder.
                 newBuilder().
                 baseUri(uri).
