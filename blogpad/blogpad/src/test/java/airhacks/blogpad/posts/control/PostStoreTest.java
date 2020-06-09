@@ -33,12 +33,18 @@ public class PostStoreTest {
         String path = "nextPost";
         String expected = "hello, duke";
         this.cut.write(path, expected);
-        String actual = this.cut.read(path);
+        String actual = this.cut.readString(path);
         assertEquals(expected, actual);
     }
     
     @Test
-    public void savePost() throws IOException {
-        this.cut.save(new Post("first", "hey,duke"));
+    public void savePostThenRead() throws IOException {
+        String title = "first";
+        Post expected = new Post(title, "hey,duke");
+        this.cut.save(expected);
+        
+        Post actual = this.cut.read(title);
+        assertEquals(expected.title,actual.title);
+        assertEquals(expected.content,actual.content);
     }
 }
