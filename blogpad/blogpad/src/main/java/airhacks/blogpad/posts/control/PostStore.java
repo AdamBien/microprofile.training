@@ -26,10 +26,14 @@ public class PostStore {
         this.storageDirectoryPath = Path.of(this.storageDir);
     }
 
-    public void save(Post post) throws IOException {
+    public void save(Post post) {
         String fileName = post.title;
         String stringified = serialize(post);
-        write(fileName, stringified);
+        try{
+            write(fileName, stringified);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot save post " + fileName);
+        }
     }
 
     String serialize(Post post) {
