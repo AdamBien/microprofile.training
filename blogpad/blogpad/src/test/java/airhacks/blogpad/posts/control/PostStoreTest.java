@@ -28,10 +28,15 @@ public class PostStoreTest {
 
     @Test
     public void writeString() throws IOException {
-        String path  = "target/nextPost";
+        String path = "target/nextPost";
         String expected = "hello, duke";
         this.cut.write(path, expected);
         String actual = this.cut.read(path);
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void savePost() throws IOException {
+        this.cut.save(new Post("target/first", "hey,duke"));
     }
 }

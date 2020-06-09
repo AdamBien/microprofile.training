@@ -11,6 +11,17 @@ import airhacks.blogpad.posts.entity.Post;
 
 public class PostStore {
 
+    public void save(Post post) throws IOException {
+        String fileName = post.title;
+        String stringified = serialize(post);
+        write(fileName, stringified);
+    }
+
+    String serialize(Post post) {
+        Jsonb jsonb = JsonbBuilder.create();
+        return jsonb.toJson(post);
+    }
+
 
     void write(String fileName, String content) throws IOException {
         Path path = Path.of(fileName);
@@ -23,9 +34,5 @@ public class PostStore {
     }
 
 
-    public String serialize(Post post) {
-        Jsonb jsonb = JsonbBuilder.create();
-        return jsonb.toJson(post);
-    }
     
 }
