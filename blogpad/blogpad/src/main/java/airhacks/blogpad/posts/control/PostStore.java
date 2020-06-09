@@ -4,12 +4,27 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import airhacks.blogpad.posts.entity.Post;
 
 public class PostStore {
+
+    @Inject
+    @ConfigProperty(name = "root.storage.dir")
+    String storageDir;
+
+	Path storageDirectoryPath;
+
+    @PostConstruct
+    public void init() {
+        this.storageDirectoryPath = Path.of(this.storageDir);
+    }
 
     public void save(Post post) throws IOException {
         String fileName = post.title;
@@ -24,12 +39,12 @@ public class PostStore {
 
 
     void write(String fileName, String content) throws IOException {
-        Path path = Path.of(fileName);
+        Path path = this.storageDirectoryPath.resolve(fileName);
         Files.writeString(path, content);
     }
     
     String read(String fileName) throws IOException {
-        Path path = Path.of(fileName);
+        Path path = this.storageDirectoryPath.resolve(fileName);
         return Files.readString(path);
     }
 
