@@ -1,5 +1,6 @@
 package airhacks.blogpad.posts.control;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
@@ -27,6 +28,10 @@ public class PostStoreTest {
 
     @Test
     public void writeString() throws IOException {
-        this.cut.write("target/nextPost", "hello, duke");
+        String path  = "target/nextPost";
+        String expected = "hello, duke";
+        this.cut.write(path, expected);
+        String actual = this.cut.read(path);
+        assertEquals(expected,actual);
     }
 }

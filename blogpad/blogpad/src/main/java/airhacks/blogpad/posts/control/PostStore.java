@@ -14,7 +14,12 @@ public class PostStore {
 
     void write(String fileName, String content) throws IOException {
         Path path = Path.of(fileName);
-        Files.writeString(path,content);
+        Files.writeString(path, content);
+    }
+    
+    String read(String fileName) throws IOException {
+        Path path = Path.of(fileName);
+        return Files.readString(path);
     }
 
 
