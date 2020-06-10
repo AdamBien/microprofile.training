@@ -32,7 +32,7 @@ public class PostStore {
         try{
             write(fileName, stringified);
         } catch (IOException ex) {
-            throw new IllegalStateException("Cannot save post " + fileName);
+            throw new IllegalStateException("Cannot save post " + fileName,ex);
         }
     }
 
@@ -48,9 +48,13 @@ public class PostStore {
     }
 
 
-    public Post read(String fileName) throws IOException {
+    public Post read(String fileName) {
+        try{
         String stringified = this.readString(fileName);
         return this.deserialize(stringified);
+    } catch (IOException ex) {
+        throw new IllegalStateException("Cannot fetch post: " + fileName,ex);
+    }
     }
 
     Post deserialize(String stringified){
