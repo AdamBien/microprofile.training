@@ -3,10 +3,12 @@ import java.net.URI;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,18 @@ public class PostsResourceIT {
         response = this.client.findPost(title);
         status = response.getStatus();
         assertEquals(200, status);
+    }
 
+    @Test
+    public void saveWithInvalidTitle() {
+        String title = "/";
+        JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
+        try{
+            this.client.save(post);
+            fail("Invalid title should not be stored");
+        } catch (WebApplicationException ex) {
+        
+        }
 
     }
     
