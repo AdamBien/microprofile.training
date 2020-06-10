@@ -16,5 +16,10 @@ public interface PostsResourceClient {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     Response save(JsonObject post);
+
+    @GET
+    @Path("{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Response findPost(@PathParam("title") String title);
     
 }
