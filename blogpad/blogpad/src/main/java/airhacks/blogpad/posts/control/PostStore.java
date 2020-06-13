@@ -27,8 +27,8 @@ public class PostStore {
     }
 
     public void save(Post post) {
-        String fileName = post.title;
-        String stringified = serialize(post);
+        var fileName = post.title;
+        var stringified = serialize(post);
         try{
             write(fileName, stringified);
         } catch (IOException ex) {
@@ -37,20 +37,20 @@ public class PostStore {
     }
 
     String serialize(Post post) {
-        Jsonb jsonb = JsonbBuilder.create();
+        var jsonb = JsonbBuilder.create();
         return jsonb.toJson(post);
     }
 
 
     void write(String fileName, String content) throws IOException {
-        Path path = this.storageDirectoryPath.resolve(fileName);
+        var path = this.storageDirectoryPath.resolve(fileName);
         Files.writeString(path, content);
     }
 
 
     public Post read(String fileName) {
         try{
-        String stringified = this.readString(fileName);
+        var stringified = this.readString(fileName);
         return this.deserialize(stringified);
     } catch (IOException ex) {
         throw new StorageException("Cannot fetch post: " + fileName,ex);
@@ -58,13 +58,13 @@ public class PostStore {
     }
 
     Post deserialize(String stringified){
-        Jsonb jsonb = JsonbBuilder.create();
+        var jsonb = JsonbBuilder.create();
         return jsonb.fromJson(stringified, Post.class);
     }
  
 
     String readString(String fileName) throws IOException {
-        Path path = this.storageDirectoryPath.resolve(fileName);
+        var path = this.storageDirectoryPath.resolve(fileName);
         return Files.readString(path);
     }
 
