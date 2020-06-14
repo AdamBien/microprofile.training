@@ -9,6 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.metrics.annotation.Counted;
+
 import airhacks.blogpad.posts.control.PostStore;
 import airhacks.blogpad.posts.entity.Post;
 
@@ -18,6 +20,7 @@ public class PostsResource {
     @Inject
     PostStore store;
 
+    @Counted
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void save(Post post) {
