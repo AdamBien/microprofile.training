@@ -1,4 +1,4 @@
-package airhacks.service.ping.boundary;
+package airhacks.blogpad.posts.boundary;
 
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;

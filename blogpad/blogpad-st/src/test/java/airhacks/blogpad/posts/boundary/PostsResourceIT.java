@@ -1,4 +1,4 @@
-package airhacks.service.ping.boundary;
+package airhacks.blogpad.posts.boundary;
 import java.net.URI;
 
 import javax.json.Json;
