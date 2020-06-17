@@ -19,6 +19,9 @@ public class PostStore {
     @ConfigProperty(name = "root.storage.dir")
     String storageDir;
 
+    @Inject
+    TitleNormalizer normalizer;
+
 	Path storageDirectoryPath;
 
     @PostConstruct
@@ -27,7 +30,7 @@ public class PostStore {
     }
 
     public void save(Post post) {
-        var fileName = this.normalize(post.title);
+        var fileName = this.normalizer.normalize(post.title);
         var stringified = serialize(post);
         try {
             write(fileName, stringified);
@@ -36,22 +39,7 @@ public class PostStore {
         }
     }
     
-    String normalize(String title){
-        return title.codePoints().
-                map(this::replaceWithDigitOrLetter)
-                .collect(StringBuffer::new, StringBuffer::appendCodePoint, StringBuffer::append).
-                toString();
-    }
-
-    int replaceWithDigitOrLetter(int codePoint){
-        if (Character.isLetterOrDigit(codePoint)) {
-            return codePoint;
-        } else {
-            return "-".codePoints().
-                    findFirst().
-                    orElseThrow();
-        }
-    }
+ 
 
 
     
