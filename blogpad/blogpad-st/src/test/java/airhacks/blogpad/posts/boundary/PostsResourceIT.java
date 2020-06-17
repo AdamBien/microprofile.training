@@ -50,6 +50,10 @@ public class PostsResourceIT {
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
         this.client.save(post);
 
+        Response response = this.client.findPost("-");
+        int status = response.getStatus();
+        assertEquals(200, status);
+
     }
     
 }
