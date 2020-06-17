@@ -12,8 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import airhacks.blogpad.posts.boundary.PostsResourceIT;
 
 /**
  *
@@ -22,6 +25,13 @@ import org.junit.jupiter.api.Test;
 public class MetricsResourceIT {
 
     private MetricsResourceClient client;
+
+    @BeforeAll
+    public static void initMetricsWithBusinessCall() {
+        var test = new PostsResourceIT();
+        test.init();
+        test.save();
+    }
 
     @BeforeEach
     public void init() {
