@@ -27,15 +27,34 @@ public class PostStore {
     }
 
     public void save(Post post) {
-        var fileName = post.title;
+        var fileName = this.normalize(post.title);
         var stringified = serialize(post);
-        try{
+        try {
             write(fileName, stringified);
         } catch (IOException ex) {
-            throw new StorageException("Cannot save post " + fileName,ex);
+            throw new StorageException("Cannot save post " + fileName, ex);
+        }
+    }
+    
+    String normalize(String title){
+        return title.codePoints().
+                map(this::replaceWithDigitOrLetter)
+                .collect(StringBuffer::new, StringBuffer::appendCodePoint, StringBuffer::append).
+                toString();
+    }
+
+    int replaceWithDigitOrLetter(int codePoint){
+        if (Character.isLetterOrDigit(codePoint)) {
+            return codePoint;
+        } else {
+            return "-".codePoints().
+                    findFirst().
+                    orElseThrow();
         }
     }
 
+
+    
     String serialize(Post post) {
         var jsonb = JsonbBuilder.create();
         return jsonb.toJson(post);

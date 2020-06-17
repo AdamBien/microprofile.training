@@ -48,12 +48,7 @@ public class PostsResourceIT {
     public void saveWithInvalidTitle() {
         String title = "/";
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
-        try{
-            this.client.save(post);
-            fail("Invalid title should not be stored");
-        } catch (WebApplicationException ex) {
-        
-        }
+        this.client.save(post);
 
     }
     
