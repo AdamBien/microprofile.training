@@ -2,6 +2,7 @@ package airhacks.blogpad.posts.entity;
 
 public class Post {
 
+    public String fileName;
     public String title;
     public String content;
 
