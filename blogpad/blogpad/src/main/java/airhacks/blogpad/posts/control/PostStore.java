@@ -29,13 +29,31 @@ public class PostStore {
         this.storageDirectoryPath = Path.of(this.storageDir);
     }
 
-    public Post save(Post post) {
+    public Post createNew(Post post) {
         var fileName = this.normalizer.normalize(post.title);
+        if (this.fileExists(fileName)) {
+            throw new StorageException("Post with name: " +  fileName + " already exists");
+        }
         var stringified = serialize(post);
         try {
             post.fileName = fileName;
             write(fileName, stringified);
             return post;
+        } catch (IOException ex) {
+            throw new StorageException("Cannot save post " + fileName, ex);
+        }
+    }
+
+    boolean fileExists(String fileName) {
+        Path fqn = this.storageDirectoryPath.resolve(fileName);
+        return Files.exists(fqn);
+    }
+
+    public void update(Post post) {
+        var fileName = this.normalizer.normalize(post.title);
+        var stringified = serialize(post);
+        try {
+            write(fileName, stringified);
         } catch (IOException ex) {
             throw new StorageException("Cannot save post " + fileName, ex);
         }

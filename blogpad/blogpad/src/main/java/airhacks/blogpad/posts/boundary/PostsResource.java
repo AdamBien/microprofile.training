@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -26,13 +27,23 @@ public class PostsResource {
     PostStore store;
 
     @Counted
-    @PUT
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@Context UriInfo info, Post post) {
-        Post postWithFileName = this.store.save(post);
+    public Response createNew(@Context UriInfo info, Post post) {
+        Post postWithFileName = this.store.createNew(post);
         URI uri = info.getAbsolutePathBuilder().path(postWithFileName.fileName).build();
         return Response.created(uri).build();
     }
+
+    @Counted
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@Context UriInfo info, Post post) {
+        this.store.update(post);
+        return Response.ok().build();
+    }
+
+
 
     @GET
     @Path("{title}")

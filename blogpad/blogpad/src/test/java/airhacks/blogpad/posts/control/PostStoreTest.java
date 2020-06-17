@@ -41,7 +41,7 @@ public class PostStoreTest {
     public void savePostThenRead() throws IOException {
         String title = "first";
         Post expected = new Post(title, "hey,duke");
-        this.cut.save(expected);
+        this.cut.createNew(expected);
         
         Post actual = this.cut.read(title);
         assertEquals(expected.title,actual.title);
