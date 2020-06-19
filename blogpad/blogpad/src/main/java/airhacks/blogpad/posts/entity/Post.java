@@ -1,5 +1,7 @@
 package airhacks.blogpad.posts.entity;
 
+import java.time.LocalDateTime;
+
 import javax.validation.constraints.Size;
 
 public class Post {
@@ -12,6 +14,9 @@ public class Post {
     @Size(min=3)
     public String content;
 
+    public LocalDateTime createdAt;
+    public LocalDateTime modifiedAt;
+
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
@@ -20,5 +25,12 @@ public class Post {
     public Post() {
     }
 
+    public void setCreatedAt() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public void updateModifiedAt() {
+        this.modifiedAt = LocalDateTime.now();
+    }
     
 }

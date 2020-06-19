@@ -32,11 +32,12 @@ public class PostStore {
     public Post createNew(Post post) {
         var fileName = this.normalizer.normalize(post.title);
         if (this.fileExists(fileName)) {
-            throw new StorageException("Post with name: " +  fileName + " already exists");
+            throw new StorageException("Post with name: " + fileName + " already exists");
         }
+        post.setCreatedAt();
+        post.fileName = fileName;
         var stringified = serialize(post);
         try {
-            post.fileName = fileName;
             write(fileName, stringified);
             return post;
         } catch (IOException ex) {
@@ -51,6 +52,7 @@ public class PostStore {
 
     public void update(Post post) {
         var fileName = this.normalizer.normalize(post.title);
+        post.updateModifiedAt();
         var stringified = serialize(post);
         try {
             write(fileName, stringified);

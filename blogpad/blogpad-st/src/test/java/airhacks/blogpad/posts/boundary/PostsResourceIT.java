@@ -8,6 +8,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,23 +33,27 @@ public class PostsResourceIT {
     }
 
     @Test
-    public void save() {
-        String title = "remote_hello";
+    public void createNew() {
+        String title = "remote_hello" + System.currentTimeMillis();
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
-        Response response = this.client.save(post);
+        Response response = this.client.createNew(post);
         int status = response.getStatus();
-        assertEquals(200, status);
+        assertEquals(201, status);
 
         response = this.client.findPost(title);
         status = response.getStatus();
         assertEquals(200, status);
+        var fetchedTitle = response.readEntity(JsonObject.class);
+        System.out.println("--- " + fetchedTitle);
+        assertNotNull(fetchedTitle.getString("createdAt", null));
+        assertNull(fetchedTitle.getString("modifiedAt",null));
     }
 
     @Test
     public void saveTitleWithInvalidFileName() {
-        String title = "hello/world";
+        String title = "hello/world"+System.currentTimeMillis();
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
-        this.client.save(post);
+        this.client.createNew(post);
 
         Response response = this.client.findPost("-");
         int status = response.getStatus();
@@ -60,7 +65,7 @@ public class PostsResourceIT {
         String title = "no";
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
         try{
-            this.client.save(post);
+            this.client.createNew(post);
             fail("Expecting WebApplicationEception with 400");
         } catch (WebApplicationException ex) {
             var response = ex.getResponse();

@@ -30,7 +30,7 @@ public class MetricsResourceIT {
     public static void initMetricsWithBusinessCall() {
         var test = new PostsResourceIT();
         test.init();
-        test.save();
+        test.createNew();
     }
 
     @BeforeEach
