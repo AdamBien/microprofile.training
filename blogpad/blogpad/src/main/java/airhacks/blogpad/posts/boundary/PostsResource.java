@@ -3,6 +3,7 @@ package airhacks.blogpad.posts.boundary;
 import java.net.URI;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -29,7 +30,7 @@ public class PostsResource {
     @Counted
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createNew(@Context UriInfo info, Post post) {
+    public Response createNew(@Context UriInfo info, @Valid Post post) {
         Post postWithFileName = this.store.createNew(post);
         URI uri = info.getAbsolutePathBuilder().path(postWithFileName.fileName).build();
         return Response.created(uri).build();
@@ -38,7 +39,7 @@ public class PostsResource {
     @Counted
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@Context UriInfo info, Post post) {
+    public Response update(@Context UriInfo info, @Valid Post post) {
         this.store.update(post);
         return Response.ok().build();
     }

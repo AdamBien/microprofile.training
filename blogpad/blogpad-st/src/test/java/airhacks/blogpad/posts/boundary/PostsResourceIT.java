@@ -23,7 +23,7 @@ public class PostsResourceIT {
 
     @BeforeEach
     public void init() {
-        URI uri = URI.create("http://localhost:9080/blogpad/resources/");
+        URI uri = URI.create("http://localhost:8080/blogpad/resources/");
         this.client = RestClientBuilder.
                 newBuilder().
                 baseUri(uri).
@@ -45,8 +45,8 @@ public class PostsResourceIT {
     }
 
     @Test
-    public void saveWithInvalidTitle() {
-        String title = "/";
+    public void saveTitleWithInvalidFileName() {
+        String title = "hello/world";
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
         this.client.save(post);
 
@@ -54,6 +54,19 @@ public class PostsResourceIT {
         int status = response.getStatus();
         assertEquals(200, status);
 
+    }
+    @Test
+    public void saveWithTooShortTitle() {
+        String title = "no";
+        JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
+        try{
+            this.client.save(post);
+            fail("Expecting WebApplicationEception with 400");
+        } catch (WebApplicationException ex) {
+            var response = ex.getResponse();
+            var status = response.getStatus();
+            assertEquals(400,status);
+        }
     }
     
 }
