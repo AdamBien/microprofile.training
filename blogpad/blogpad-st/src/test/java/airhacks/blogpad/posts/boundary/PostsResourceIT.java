@@ -37,7 +37,7 @@ public class PostsResourceIT {
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "first st").build();
         Response response = this.client.save(post);
         int status = response.getStatus();
-        assertEquals(204, status);
+        assertEquals(200, status);
 
         response = this.client.findPost(title);
         status = response.getStatus();

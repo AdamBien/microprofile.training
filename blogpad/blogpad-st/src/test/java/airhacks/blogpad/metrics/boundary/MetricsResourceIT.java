@@ -56,7 +56,7 @@ public class MetricsResourceIT {
         assertNotNull(metrics);
         assertFalse(metrics.isEmpty());
         System.out.println("metrics from server: " + metrics);
-        int saveInvocationCounter = metrics.getJsonNumber("airhacks.blogpad.posts.boundary.PostsResource.save")
+        int saveInvocationCounter = metrics.getJsonNumber("airhacks.blogpad.posts.boundary.PostsResource.createNew")
                 .intValue();
         assertTrue(saveInvocationCounter >= 0);
 
