@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 import airhacks.blogpad.posts.control.PostStore;
 import airhacks.blogpad.posts.entity.Post;
@@ -29,6 +30,10 @@ public class PostsResource {
 
     @Counted
     @POST
+    @APIResponse(
+        responseCode = "400",
+        description = "Post with the title already exists. Use PUT for updates"
+    )
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNew(@Context UriInfo info, @Valid Post post) {
         Post postWithFileName = this.store.createNew(post);
@@ -39,6 +44,7 @@ public class PostsResource {
     @Counted
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response update(@Context UriInfo info, @Valid Post post) {
         this.store.update(post);
         return Response.ok().build();
