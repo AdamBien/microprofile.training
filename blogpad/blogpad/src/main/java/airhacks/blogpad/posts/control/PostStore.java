@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
+import javax.ws.rs.BadRequestException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -32,7 +33,7 @@ public class PostStore {
     public Post createNew(Post post) {
         var fileName = this.normalizer.normalize(post.title);
         if (this.fileExists(fileName)) {
-            throw new StorageException("Post with name: " + fileName + " already exists");
+            throw new BadRequestException("Post with name: " + fileName + " already exists");
         }
         post.setCreatedAt();
         post.fileName = fileName;
