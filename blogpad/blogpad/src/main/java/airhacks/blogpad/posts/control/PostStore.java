@@ -33,7 +33,7 @@ public class PostStore {
     public Post createNew(Post post) {
         var fileName = this.normalizer.normalize(post.title);
         if (this.fileExists(fileName)) {
-            throw new BadRequestException("Post with name: " + fileName + " already exists");
+            throw new BadRequestException("Post with name: " + fileName + " already exists, use PUT for updates");
         }
         post.setCreatedAt();
         post.fileName = fileName;
@@ -53,6 +53,9 @@ public class PostStore {
 
     public void update(Post post) {
         var fileName = this.normalizer.normalize(post.title);
+        if (!this.fileExists(fileName)) {
+            throw new BadRequestException("Post with name: " + fileName + " does not exists, use POST to create");
+        }
         post.updateModifiedAt();
         var stringified = serialize(post);
         try {
