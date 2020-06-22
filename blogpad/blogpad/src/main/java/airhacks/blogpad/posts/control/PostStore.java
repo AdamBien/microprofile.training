@@ -5,12 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.BadRequestException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.health.Health;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
 
 import airhacks.blogpad.posts.entity.Post;
 
@@ -28,6 +33,15 @@ public class PostStore {
     @PostConstruct
     public void init() {
         this.storageDirectoryPath = Path.of(this.storageDir);
+    }
+
+    @Produces
+    @Liveness
+    public HealthCheck checkPostsDirectoryExists() {
+        return () -> HealthCheckResponse.
+        named("posts-directory-exists").
+                state(Files.exists(this.storageDirectoryPath)).
+                build();
     }
 
     public Post createNew(Post post) {
