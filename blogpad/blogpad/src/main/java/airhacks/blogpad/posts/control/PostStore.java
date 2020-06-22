@@ -1,6 +1,7 @@
 package airhacks.blogpad.posts.control;
 
 import java.io.IOException;
+import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -26,6 +27,10 @@ public class PostStore {
     String storageDir;
 
     @Inject
+    @ConfigProperty(name="minimum.storage.space",defaultValue = "50")
+    int storageThreshold;
+
+    @Inject
     TitleNormalizer normalizer;
 
 	Path storageDirectoryPath;
@@ -42,6 +47,24 @@ public class PostStore {
         named("posts-directory-exists").
                 state(Files.exists(this.storageDirectoryPath)).
                 build();
+    }
+    @Produces
+    @Liveness
+    public HealthCheck checkEnoughSpace() {
+        var size = this.getPostsStorageSpaceInMB();
+        var enoughSpace = size >= this.storageThreshold;
+        return () -> HealthCheckResponse.named("posts-directory-has-space")
+                .state(enoughSpace).
+                build();
+    }
+    
+    long getPostsStorageSpaceInMB() {
+        try {
+			return Files.getFileStore(this.storageDirectoryPath).getUsableSpace() / 1024 / 1024;
+        } catch (IOException e) {
+            throw new StorageException("Cannot fetch size information from " + this.storageDirectoryPath,e);
+        }
+
     }
 
     public Post createNew(Post post) {
