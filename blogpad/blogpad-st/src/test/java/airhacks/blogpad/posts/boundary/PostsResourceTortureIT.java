@@ -2,6 +2,7 @@ package airhacks.blogpad.posts.boundary;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.net.URI;
@@ -21,10 +22,16 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import airhacks.blogpad.metrics.boundary.MetricsResourceClient;
+
 public class PostsResourceTortureIT {
     private PostsResourceClient client;
 	private String title;
-	private ExecutorService threadPool;
+    private ExecutorService threadPool;
+    
+    private MetricsResourceClient metricsClient;
+
+
 
     @BeforeEach
     public void init() {
@@ -36,6 +43,15 @@ public class PostsResourceTortureIT {
         int status = response.getStatus();
         assertEquals(201, status);
         this.threadPool = Executors.newFixedThreadPool(20);
+        this.initMetricsEndpoint();
+    }
+
+    void initMetricsEndpoint() {
+        this.metricsClient = RestClientBuilder.
+                newBuilder().
+                baseUri(URI.create("http://localhost:8080/")).
+                build(MetricsResourceClient.class);
+
 
     }
     
@@ -46,6 +62,7 @@ public class PostsResourceTortureIT {
                 .generate(this::runScenario).limit(500)
                 .collect(Collectors.toList());
         tasks.forEach(CompletableFuture::join);
+        this.verifyPerformance();
     }
 
     CompletableFuture<Void> runScenario() {
@@ -63,10 +80,18 @@ public class PostsResourceTortureIT {
     
     }
 
-     void findPost() {
+    void findPost() {
         Response response = this.client.findPost(this.title);
         JsonObject post = response.readEntity(JsonObject.class);
         assertNotNull(post);
+    }
+    
+    void verifyPerformance() {
+        JsonObject findOperationResult = this.metricsClient.applicationMetrics()
+                .getJsonObject("airhacks.blogpad.posts.boundary.PostsResource.find");
+        double oneMinRate = findOperationResult.getJsonNumber("oneMinRate").doubleValue();
+        System.out.println("####-------oneMinRate " + oneMinRate);
+        assertTrue(oneMinRate > 5);
     }
     
 }
