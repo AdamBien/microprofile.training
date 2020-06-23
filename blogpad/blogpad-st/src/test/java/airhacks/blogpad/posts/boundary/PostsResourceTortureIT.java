@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.net.URI;
 import java.util.List;
@@ -58,6 +59,7 @@ public class PostsResourceTortureIT {
 
     @Test
     public void startTorture() {
+        assumeTrue(System.getProperty("torture",null) != null);
         List<CompletableFuture<Void>> tasks = Stream
                 .generate(this::runScenario).limit(500)
                 .collect(Collectors.toList());
