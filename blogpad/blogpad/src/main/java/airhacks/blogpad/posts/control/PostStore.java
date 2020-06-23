@@ -1,22 +1,20 @@
 package airhacks.blogpad.posts.control;
 
 import java.io.IOException;
-import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.BadRequestException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.health.Health;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
 
 import airhacks.blogpad.posts.entity.Post;
 
@@ -58,7 +56,8 @@ public class PostStore {
                 build();
     }
     
-    long getPostsStorageSpaceInMB() {
+    @Gauge(unit = "mb")
+    public long getPostsStorageSpaceInMB() {
         try {
 			return Files.getFileStore(this.storageDirectoryPath).getUsableSpace() / 1024 / 1024;
         } catch (IOException e) {
