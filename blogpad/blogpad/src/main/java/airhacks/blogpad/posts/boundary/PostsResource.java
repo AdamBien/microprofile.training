@@ -53,7 +53,6 @@ public class PostsResource {
     }
 
 
-
     @Timed
     @GET
     @Path("{title}")
