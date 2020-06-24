@@ -14,7 +14,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.MetricRegistry.Type;
 import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.RegistryType;
 
 import airhacks.blogpad.posts.entity.Post;
 
@@ -31,7 +34,11 @@ public class PostStore {
     @Inject
     TitleNormalizer normalizer;
 
-	Path storageDirectoryPath;
+    Path storageDirectoryPath;
+    
+    @Inject
+    @RegistryType(type = Type.APPLICATION)
+    MetricRegistry registry;
 
     @PostConstruct
     public void init() {
@@ -116,8 +123,10 @@ public class PostStore {
 
     public Post read(String title) {
         var fileName = this.normalizer.normalize(title);
-        if (!this.fileExists(fileName))
+        if (!this.fileExists(fileName)) {
+            this.increaseNotExistingPostCounter();
             return null;
+        }
         try{
         var stringified = this.readString(fileName);
         return this.deserialize(stringified);
@@ -126,7 +135,11 @@ public class PostStore {
     }
     }
 
-    Post deserialize(String stringified){
+    void increaseNotExistingPostCounter() {
+        this.registry.counter("fetch_post_with_ne_title").inc();
+	}
+
+	Post deserialize(String stringified){
         var jsonb = JsonbBuilder.create();
         return jsonb.fromJson(stringified, Post.class);
     }
