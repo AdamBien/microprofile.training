@@ -18,6 +18,7 @@ public class PostStoreTest {
     public void init() {
         this.cut = new PostStore();
         this.cut.storageDir = "target";
+        this.cut.normalizer = TitleNormalizerTest.create();
         this.cut.init();
     }
  
