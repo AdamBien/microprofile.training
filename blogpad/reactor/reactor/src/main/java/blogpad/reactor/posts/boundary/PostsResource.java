@@ -17,15 +17,14 @@ import blogpad.reactor.posts.control.PostsResourceClient;
 public class PostsResource {
 
     @Inject
-    @RestClient
-    PostsResourceClient client;
+    Reactor reactor;
+   
 
     @GET
     @Path("{title}")
     @Produces(MediaType.TEXT_HTML)
     public String findPost(@PathParam("title") String title){
-        Response response = this.client.findPost("initial");
-        return "<h1>hello</h1> " + title + " "+ response.readEntity(JsonObject.class);
+        return this.reactor.render(title);
     }
 
 
