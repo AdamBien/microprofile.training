@@ -7,11 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import blogpad.reactor.posts.control.PostsResourceClient;
+import org.eclipse.microprofile.opentracing.Traced;
 
 @Path("posts")
 public class PostsResource {
@@ -21,6 +18,7 @@ public class PostsResource {
    
 
     @GET
+    @Traced
     @Path("{title}")
     @Produces(MediaType.TEXT_HTML)
     public String findPost(@PathParam("title") String title){

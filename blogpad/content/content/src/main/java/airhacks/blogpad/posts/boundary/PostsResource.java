@@ -20,6 +20,7 @@ import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import airhacks.blogpad.posts.control.PostStore;
 import airhacks.blogpad.posts.entity.Post;
@@ -55,6 +56,7 @@ public class PostsResource {
 
     @Timed
     @GET
+    @Traced
     @Path("{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Post find(@PathParam("title") String title) {
