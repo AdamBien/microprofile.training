@@ -2,13 +2,17 @@ version: '3.8'
 services:
   reactor:
     build: reactor/reactor
-    container_name: reactor    
+    container_name: reactor   
+    environment: 
+      - "JAEGER_HOST=jaeger"
     ports:
     - "8080:8080"
     - "9990:9990"
   content:
     build: content/content
     container_name: content    
+    environment: 
+      - "JAEGER_HOST=jaeger"
     ports:
     - "8081:8080"
     - "9991:9990"
