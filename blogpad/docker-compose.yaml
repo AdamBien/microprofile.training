@@ -5,6 +5,7 @@ services:
     container_name: reactor   
     environment: 
       - "JAEGER_HOST=jaeger"
+      - "CONTENT_MP_REST_URL=http://content:8080/content/resources"
     ports:
     - "8080:8080"
     - "9990:9990"
