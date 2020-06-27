@@ -3,6 +3,9 @@ package airhacks.blogpad.posts.control;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Initialized;
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
@@ -12,9 +15,8 @@ import org.eclipse.microprofile.health.Liveness;
 
 import airhacks.blogpad.posts.entity.Post;
 
-@Startup
-@Singleton
-public class Initialzer {
+@ApplicationScoped
+public class Initializer {
 
 
     static final String TITLE = "initial";
@@ -22,8 +24,7 @@ public class Initialzer {
     @Inject
     PostStore store;
 
-    @PostConstruct
-    public void installFirstPost() {
+    public void installFirstPost(@Observes @Initialized(ApplicationScoped.class) Object doesnMatter) {
         if(this.postExists())
             return;
         var post = this.createInitialPost();

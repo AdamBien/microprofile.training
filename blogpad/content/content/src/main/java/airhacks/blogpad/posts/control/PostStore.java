@@ -63,7 +63,7 @@ public class PostStore {
                 build();
     }
     
-    @Gauge(unit = "mb")
+    //@Gauge(unit = "mb")
     public long getPostsStorageSpaceInMB() {
         try {
 			return Files.getFileStore(this.storageDirectoryPath).getUsableSpace() / 1024 / 1024;
