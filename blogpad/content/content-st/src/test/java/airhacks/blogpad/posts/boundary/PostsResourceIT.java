@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import airhacks.blogpad.Configuration;
+
 /**
  *
  * @author airhacks.com
@@ -25,10 +27,10 @@ public class PostsResourceIT {
 
     @BeforeEach
     public void init() {
-        URI uri = URI.create("http://localhost:8080/blogpad/resources/");
+        var uri = Configuration.getValue("resource.uri");
         this.client = RestClientBuilder.
                 newBuilder().
-                baseUri(uri).
+                baseUri(URI.create(uri)).
                 build(PostsResourceClient.class);
 
     }

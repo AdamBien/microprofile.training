@@ -11,6 +11,8 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import airhacks.blogpad.Configuration;
+
 public class HealthResourceIT {
     
     
@@ -18,7 +20,8 @@ public class HealthResourceIT {
 
 	@BeforeEach
     public void init() {
-        this.client = RestClientBuilder.newBuilder().baseUri(URI.create("http://localhost:8080/"))
+        var uri = Configuration.getValue("admin.uri");
+        this.client = RestClientBuilder.newBuilder().baseUri(URI.create(uri))
                 .build(HealthResourceClient.class);
 
     }

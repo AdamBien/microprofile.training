@@ -23,6 +23,7 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import airhacks.blogpad.Configuration;
 import airhacks.blogpad.metrics.boundary.MetricsResourceClient;
 
 public class PostsResourceTortureIT {
@@ -36,8 +37,8 @@ public class PostsResourceTortureIT {
 
     @BeforeEach
     public void init() {
-        URI uri = URI.create("http://localhost:8080/blogpad/resources/");
-        this.client = RestClientBuilder.newBuilder().baseUri(uri).build(PostsResourceClient.class);
+        var uri = Configuration.getValue("resource.uri");
+        this.client = RestClientBuilder.newBuilder().baseUri(URI.create(uri)).build(PostsResourceClient.class);
         this.title = "torture" + System.currentTimeMillis();
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "for torture").build();
         Response response = this.client.createNew(post);
