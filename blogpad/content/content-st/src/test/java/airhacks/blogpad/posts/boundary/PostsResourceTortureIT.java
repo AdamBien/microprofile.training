@@ -49,9 +49,10 @@ public class PostsResourceTortureIT {
     }
 
     void initMetricsEndpoint() {
+        var adminUri = Configuration.getValue("admin.uri");
         this.metricsClient = RestClientBuilder.
                 newBuilder().
-                baseUri(URI.create("http://localhost:8080/")).
+                baseUri(URI.create(adminUri)).
                 build(MetricsResourceClient.class);
 
 
@@ -60,7 +61,7 @@ public class PostsResourceTortureIT {
 
     @Test
     public void startTorture() {
-        assumeTrue(System.getProperty("torture",null) != null);
+        assumeTrue(Configuration.getBooleanValue("torture"));
         List<CompletableFuture<Void>> tasks = Stream
                 .generate(this::runScenario).limit(500)
                 .collect(Collectors.toList());
@@ -75,11 +76,8 @@ public class PostsResourceTortureIT {
     }
     
     void findNonExistingPost() {
-        try {            
-            this.client.findPost("not-existing" + System.nanoTime());
-            fail("should not exist");
-        } catch (WebApplicationException e) {
-        }
+        var response = this.client.findPost("not-existing" + System.nanoTime());
+        assertEquals(204,response.getStatus());
     
     }
 
