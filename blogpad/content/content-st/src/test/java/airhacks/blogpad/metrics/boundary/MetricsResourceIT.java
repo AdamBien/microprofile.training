@@ -39,7 +39,7 @@ public class MetricsResourceIT {
         var uri = Configuration.getValue("admin.uri");
         this.client = RestClientBuilder.
                 newBuilder().
-                baseUri(URI.create(uri)).
+                baseUri(uri).
                 build(MetricsResourceClient.class);
 
     }

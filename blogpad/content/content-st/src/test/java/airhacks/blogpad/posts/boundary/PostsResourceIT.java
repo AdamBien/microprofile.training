@@ -30,7 +30,7 @@ public class PostsResourceIT {
         var uri = Configuration.getValue("resource.uri");
         this.client = RestClientBuilder.
                 newBuilder().
-                baseUri(URI.create(uri)).
+                baseUri(uri).
                 build(PostsResourceClient.class);
 
     }

@@ -1,12 +1,14 @@
 package airhacks.blogpad;
 
+import java.net.URI;
+
 import org.eclipse.microprofile.config.ConfigProvider;
 
 public interface Configuration {
 
-    static String getValue(String key) {
+    static URI getValue(String key) {
         var config = ConfigProvider.getConfig();
-        return config.getValue(key, String.class);
+        return config.getValue(key, URI.class);
     }
 
     static boolean getBooleanValue(String key) {

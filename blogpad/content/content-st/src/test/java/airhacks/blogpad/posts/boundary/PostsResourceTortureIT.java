@@ -38,7 +38,7 @@ public class PostsResourceTortureIT {
     @BeforeEach
     public void init() {
         var uri = Configuration.getValue("resource.uri");
-        this.client = RestClientBuilder.newBuilder().baseUri(URI.create(uri)).build(PostsResourceClient.class);
+        this.client = RestClientBuilder.newBuilder().baseUri(uri).build(PostsResourceClient.class);
         this.title = "torture" + System.currentTimeMillis();
         JsonObject post = Json.createObjectBuilder().add("title", title).add("content", "for torture").build();
         Response response = this.client.createNew(post);
@@ -52,7 +52,7 @@ public class PostsResourceTortureIT {
         var adminUri = Configuration.getValue("admin.uri");
         this.metricsClient = RestClientBuilder.
                 newBuilder().
-                baseUri(URI.create(adminUri)).
+                baseUri(adminUri).
                 build(MetricsResourceClient.class);
 
 

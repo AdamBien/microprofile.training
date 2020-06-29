@@ -21,7 +21,7 @@ public class HealthResourceIT {
 	@BeforeEach
     public void init() {
         var uri = Configuration.getValue("admin.uri");
-        this.client = RestClientBuilder.newBuilder().baseUri(URI.create(uri))
+        this.client = RestClientBuilder.newBuilder().baseUri(uri)
                 .build(HealthResourceClient.class);
 
     }
