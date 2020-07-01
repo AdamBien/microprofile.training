@@ -35,10 +35,10 @@ public class Renderer {
     
     String getRenderLogic() {
         return """
-
-                  templateContent + postContent + 14
-
-                """;
+            const postAsJSON = JSON.parse(postContent);
+            const compiledTemplate = Handlebars.compile(templateContent);
+            compiledTemplate(postAsJSON);
+            """;
 
     }
 
