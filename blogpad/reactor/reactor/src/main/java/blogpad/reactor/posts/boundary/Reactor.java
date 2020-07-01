@@ -10,6 +10,7 @@ import org.eclipse.microprofile.metrics.annotation.RegistryType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import blogpad.reactor.posts.control.PostsResourceClient;
+import blogpad.reactor.posts.control.Renderer;
 
 public class Reactor {
 
@@ -21,12 +22,25 @@ public class Reactor {
     @RegistryType(type = Type.APPLICATION)
     MetricRegistry registry;
 
+    @Inject
+    Renderer renderer;
+
     public String render(String title) {
         Response response = this.client.findPost(title);
         var status = response.getStatus();
         registry.counter("content_find_post_status_" + status).inc();
-        return "rendered " + response.readEntity(JsonObject.class);
+        var postAsString = response.readEntity(String.class);
+        return this.renderer.render(
+        """
+            <html>
+            <body>
+            <h1>{{title}}</h1>
+            <article>{{content}}</article>
+            </body>
+            </html>
+        """, postAsString);
     }
+    
 
     
 }

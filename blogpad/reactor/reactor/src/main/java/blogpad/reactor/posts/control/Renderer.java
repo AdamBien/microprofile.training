@@ -23,7 +23,7 @@ public class Renderer {
     }
  
     
-    String render(String templateContent, String postContent) {
+    public String render(String templateContent, String postContent) {
         try (Context context = Context.create("js")) {
             var bindings = context.getBindings("js");
             context.eval(this.handlebars);
