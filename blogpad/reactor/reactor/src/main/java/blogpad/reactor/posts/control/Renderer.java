@@ -36,7 +36,7 @@ public class Renderer {
             return this.unsafeRender(templateContent, postContent);
         } catch (PolyglotException e) {
             this.registry.counter("rendering_errors").inc();
-            throw new IllegalStateException("Rendering error, reason: " + e.getMessage(), ex);
+            throw new IllegalStateException("Rendering error, reason: " + e.getMessage(), e);
         }
     }
     
