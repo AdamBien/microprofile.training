@@ -1,7 +1,9 @@
 package airhacks.blogpad.posts.boundary;
 
 import java.net.URI;
+import java.security.Principal;
 
+import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -25,11 +27,15 @@ import org.eclipse.microprofile.opentracing.Traced;
 import airhacks.blogpad.posts.control.PostStore;
 import airhacks.blogpad.posts.entity.Post;
 
+@PermitAll
 @Path("posts")
 public class PostsResource {
 
     @Inject
     PostStore store;
+
+    @Inject
+    Principal principal;
 
     @Counted
     @POST
@@ -60,6 +66,7 @@ public class PostsResource {
     @Path("{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Post find(@PathParam("title") String title) {
+        System.out.println("-----------------> " + this.principal.getName());
         return this.store.read(title);
     }
     
