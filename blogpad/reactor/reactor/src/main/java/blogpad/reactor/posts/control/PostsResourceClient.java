@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @RegisterRestClient(configKey = "content")
@@ -19,6 +20,7 @@ public interface PostsResourceClient {
 
 
     @GET
+    @Retry(maxRetries = 3)
     @Path("{title}")
     @Produces(MediaType.APPLICATION_JSON)
     Response findPost(@PathParam("title") String title);
