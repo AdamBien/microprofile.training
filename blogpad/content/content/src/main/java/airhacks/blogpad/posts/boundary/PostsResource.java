@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
@@ -39,6 +40,9 @@ public class PostsResource {
     @Inject
     Principal principal;
 
+    @Inject
+    JsonWebToken token;
+
     @RolesAllowed({ "author" ,"subscriber"})
     @Counted
     @POST
@@ -48,6 +52,7 @@ public class PostsResource {
     )
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNew(@Context UriInfo info, @Valid Post post) {
+        System.out.println("--- token groups" + token.getGroups());
         Post postWithFileName = this.store.createNew(post);
         URI uri = info.getAbsolutePathBuilder().path(postWithFileName.fileName).build();
         return Response.created(uri).build();
