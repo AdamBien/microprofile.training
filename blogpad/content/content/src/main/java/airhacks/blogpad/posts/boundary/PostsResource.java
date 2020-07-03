@@ -1,7 +1,10 @@
 package airhacks.blogpad.posts.boundary;
 
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.net.URI;
 import java.security.Principal;
+
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -43,6 +46,9 @@ public class PostsResource {
     @Inject
     JsonWebToken token;
 
+    @Inject
+    Logger LOG;
+
     @RolesAllowed({ "author" ,"subscriber"})
     @Counted
     @POST
@@ -52,7 +58,7 @@ public class PostsResource {
     )
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNew(@Context UriInfo info, @Valid Post post) {
-        System.out.println("--- token groups" + token.getGroups());
+        LOG.log(Level.INFO,"SL --- token groups" + token.getGroups());
         Post postWithFileName = this.store.createNew(post);
         URI uri = info.getAbsolutePathBuilder().path(postWithFileName.fileName).build();
         return Response.created(uri).build();
@@ -75,7 +81,7 @@ public class PostsResource {
     @Path("{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Post find(@PathParam("title") String title) {
-        System.out.println("-----------------> " + this.principal.getName());
+        LOG.log(Level.INFO,"SL -----------------> " + this.principal.getName());
         return this.store.read(title);
     }
     
