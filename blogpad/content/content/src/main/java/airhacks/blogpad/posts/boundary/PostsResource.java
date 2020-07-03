@@ -3,7 +3,9 @@ package airhacks.blogpad.posts.boundary;
 import java.net.URI;
 import java.security.Principal;
 
+import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -27,7 +29,7 @@ import org.eclipse.microprofile.opentracing.Traced;
 import airhacks.blogpad.posts.control.PostStore;
 import airhacks.blogpad.posts.entity.Post;
 
-@PermitAll
+@DenyAll
 @Path("posts")
 public class PostsResource {
 
@@ -37,6 +39,7 @@ public class PostsResource {
     @Inject
     Principal principal;
 
+    @RolesAllowed({ "author" ,"subscriber"})
     @Counted
     @POST
     @APIResponse(
@@ -60,6 +63,7 @@ public class PostsResource {
     }
 
 
+    @PermitAll
     @Timed
     @GET
     @Traced

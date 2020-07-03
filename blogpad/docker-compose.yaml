@@ -8,7 +8,7 @@ services:
       - "CONTENT_MP_REST_URL=http://content:8080/content/resources"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9990/health"]
-      interval: 5s
+      interval: 60s
       timeout: 1s
       retries: 3
     ports:
@@ -21,7 +21,7 @@ services:
       - "JAEGER_HOST=jaeger"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9990/health"]
-      interval: 5s
+      interval: 60s
       timeout: 1s
       retries: 3
     ports:
