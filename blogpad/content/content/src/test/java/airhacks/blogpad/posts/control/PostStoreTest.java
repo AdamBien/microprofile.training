@@ -2,11 +2,16 @@ package airhacks.blogpad.posts.control;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import airhacks.blogpad.posts.entity.Post;
 
@@ -19,6 +24,9 @@ public class PostStoreTest {
         this.cut = new PostStore();
         this.cut.storageDir = "target";
         this.cut.normalizer = TitleNormalizerTest.create();
+        Counter counter = mock(Counter.class);
+        this.cut.registry = mock(MetricRegistry.class);
+        when(this.cut.registry.counter(Mockito.anyString())).thenReturn(counter);
         this.cut.init();
     }
  

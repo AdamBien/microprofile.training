@@ -123,6 +123,7 @@ public class PostStore {
 
     public Post read(String title) {
         var fileName = this.normalizer.normalize(title);
+        this.increaseHitCounter(fileName);
         if (!this.fileExists(fileName)) {
             this.increaseNotExistingPostCounter();
             return null;
@@ -135,6 +136,10 @@ public class PostStore {
     }
     }
 
+    void increaseHitCounter(String title) {
+        var counterName = "post_hits_" + title;
+        this.registry.counter(counterName).inc();
+    }
     void increaseNotExistingPostCounter() {
         this.registry.counter("fetch_post_with_ne_title").inc();
 	}
