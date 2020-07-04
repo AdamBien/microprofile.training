@@ -12,8 +12,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
+@RegisterClientHeaders(WildcardClientHeadersFactory.class)
 @RegisterRestClient(configKey = "content")
 @Path("posts")
 public interface PostsResourceClient {
